@@ -14,7 +14,12 @@ if(isset($_POST['submit'])) {
 
     if($user_info && password_verify($_POST['password'], $user_info['password'])) {
         $_SESSION['user'] = $user_info;
-        header('Location: my-account.php');
+        // Role-based redirection
+        if (isset($user_info['role_id']) && $user_info['role_id'] == 1) { // Assuming 1 is admin role
+            header('Location: dashboard.php');
+        } else {
+            header('Location: my-account.php');
+        }
         exit;
     } else {
         $message = 'Invalid username or password';

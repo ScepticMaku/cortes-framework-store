@@ -23,33 +23,33 @@ session_start();
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body class="store-body">
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm fade-in-section">
     <div class="container">
-        <a class="navbar-brand" href="index.php">Online Store</a>
+        <a class="navbar-brand fw-bold fs-4 logo-animate" href="index.php">Online Store</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="index.php">Home</a>
+                    <a class="nav-link active px-3" aria-current="page" href="index.php">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="add-product.php">Add Product</a>
+                    <a class="nav-link px-3" href="add-product.php">Add Product</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle px-3" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Categories
                     </a>
-                <ul class="dropdown-menu">
+                <ul class="dropdown-menu animate-dropdown">
                     <?php foreach($categories->getAll() as $category): ?>
                         <li><a class="dropdown-item" href="category.php?name=<?php echo $category['name'];  ?>"><?php echo $category['name']; ?></a></li>
                     <?php endforeach; ?>
                 </ul>
                 </li>
             </ul>
-            <a class="icon-link" href="cart.php">
-                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000" version="1.1" id="Capa_1" width="20px" height="20px" viewBox="0 0 902.86 902.86" xml:space="preserve">
+            <a class="icon-link position-relative me-3" href="cart.php" title="Cart">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="#ffffff" version="1.1" id="Capa_1" width="24px" height="24px" viewBox="0 0 902.86 902.86" xml:space="preserve">
                     <g>
                         <g>
                             <path d="M671.504,577.829l110.485-432.609H902.86v-68H729.174L703.128,179.2L0,178.697l74.753,399.129h596.751V577.829z     M685.766,247.188l-67.077,262.64H131.199L81.928,246.756L685.766,247.188z"/>
@@ -57,16 +57,19 @@ session_start();
                         </g>
                     </g>
                 </svg>
-                <span id="cart-count" class="badge bg-success"><?php echo countCart(); ?></span>
+                <span id="cart-count" class="badge bg-danger position-absolute top-0 start-100 translate-middle"><?php echo countCart(); ?></span>
             </a>
             <ul class="navbar-nav mb-2 mb-lg-0">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle px-3" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Hello, <?php echo isset($_SESSION['user']) ? $_SESSION['user']['name'] : 'Guest'; ?>
                     </a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu animate-dropdown">
                     <?php if (isLoggedIn()): ?>
                         <li><a class="dropdown-item" href="my-account.php">My Account</a></li>
+                        <?php if (isset($_SESSION['user']) && $_SESSION['user']['role_id'] == 1): ?>
+                            <li><a class="dropdown-item" href="dashboard.php">Dashboard</a></li>
+                        <?php endif; ?>
                         <li><a class="dropdown-item" href="logout.php">Logout</a></li>
                     <?php else: ?>
                         <li><a class="dropdown-item" href="login.php">Login</a></li>

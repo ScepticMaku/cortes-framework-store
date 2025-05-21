@@ -3,11 +3,16 @@
 <?php
 
 use Aries\MiniFrameworkStore\Models\User;
+use Aries\MiniFrameworkStore\Models\Checkout;
+
+session_start();
 
 if(!isset($_SESSION['user'])) {
     header('Location: login.php');
     exit();
 }
+
+/* Removed redirection for admin users to allow profile viewing */
 
 if(isset($_POST['submit'])) {
     $name = $_POST['name'];
@@ -36,6 +41,12 @@ if(isset($_POST['submit'])) {
 
     echo "<script>alert('Account details updated successfully!');</script>";
 }
+
+$checkout = new Checkout();
+$userOrders = $checkout->getAllOrders();
+$userOrders = array_filter($userOrders, function($order) {
+    return $order['user_name'] === $_SESSION['user']['name'];
+});
 
 ?>
 
@@ -71,8 +82,33 @@ if(isset($_POST['submit'])) {
                 </div>
                 <button type="submit" class="btn btn-primary" name="submit">Save Changes</button>
             </form>
+
+            <h2 class="mt-5">My Orders</h2>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Total Price</th>
+                        <th>Order Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    foreach ($userOrders as $order) {
+                        echo '<tr>';
+                        echo '<td>' . htmlspecialchars($order['id']) . '</td>';
+                        echo '<td>' . htmlspecialchars($order['product_name']) . '</td>';
+                        echo '<td>' . htmlspecialchars($order['quantity']) . '</td>';
+                        echo '<td>' . htmlspecialchars($order['total_price']) . '</td>';
+                        echo '<td>' . htmlspecialchars($order['order_date']) . '</td>';
+                        echo '</tr>';
+                    }
+                    ?>
+                </tbody>
+            </table>
         </div>
     </div>
-</div>
 
 <?php template('footer.php'); ?>

@@ -75,4 +75,19 @@ class Checkout extends Database
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    public function getRecentOrders($limit = 10)
+    {
+        $sql = "SELECT o.id, u.name AS user_name, p.name AS product_name, od.quantity, od.price AS total_price, o.created_at AS order_date
+                FROM orders o
+                LEFT JOIN users u ON o.customer_id = u.id
+                LEFT JOIN order_details od ON o.id = od.order_id
+                LEFT JOIN products p ON od.product_id = p.id
+                ORDER BY o.created_at DESC
+                LIMIT :limit";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':limit', (int)$limit, \PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
 }
